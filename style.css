@@ -46,3 +46,7 @@ select{width:100%;height:48px;border-radius:14px;border:0;background:#232733;col
 .bub{max-width:230px;background:#fff;color:#222;border-radius:16px 16px 4px 16px;padding:10px 26px 10px 12px;font-size:14px;line-height:1.4;position:relative;animation:pop .25s}
 .bub span{position:absolute;top:4px;right:8px;color:#999;font-size:13px}
 @keyframes bob{50%{transform:translateY(-4px)}}@keyframes pop{from{transform:scale(.7);opacity:0}}
+.chips.wrap{flex-wrap:wrap;max-height:200px;overflow-y:auto}
+.chip.cat{padding:8px 14px;font-size:13px}.chip.cat.on{background:#e8eaf0;color:#111}
+.search{height:46px;margin:2px 0 8px}
+.tag{font-style:normal;font-size:10px;background:#0006;border-radius:6px;padding:1px 5px;margin-left:5px}
