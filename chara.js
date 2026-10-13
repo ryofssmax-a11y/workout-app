@@ -15,13 +15,13 @@ return `<svg viewBox="0 0 80 72" width="62" height="56" class="slime"><defs><rad
 function refreshMascot(){const f=$('#mascot .mface');if(f)f.innerHTML=masSvg();const m=$('#mascot');if(m)m.style.display=chara().hide?'none':'';const a=$('#chat .mface');if(a)a.innerHTML=masSvg()}
 function setChara(o){db.chara={...chara(),...o};save();refreshMascot();const pv=$('#cpv');if(pv)pv.innerHTML=masSvg();const cs=$('#cs');if(cs)cs.innerHTML=charaOpts()}
 function charaOpts(){const c=chara();return `<div class="shp">${Object.keys(SHAPES).map(s=>`<button class="${s===c.shape?'on':''}" onclick="setChara({shape:'${s}'})"><span class="mface">${masSvg({shape:s})}</span>${s}</button>`).join('')}</div><div class="cols">${Object.entries(COLORS).map(([n,h])=>`<button title="${n}" class="${h===c.color?'on':''}" style="background:${h}" onclick="setChara({color:'${h}'})"></button>`).join('')}<label class="cpick" style="background:${c.color}">🎨<input type="color" value="${c.color}" oninput="setChara({color:this.value})"></label></div>`}
-function charaSheet(){const c=chara();sheet(`<h3>🎨 キャラクター</h3><div class="cpvw"><span id="cpv" class="mface">${masSvg()}</span></div><div id="cs">${charaOpts()}</div><label class="tgl"><input type="checkbox" ${c.hide?'checked':''} onchange="setChara({hide:this.checked});say(this.checked?'':'また会えたね！','happy')"> キャラクターを表示しない</label><p class="note">非表示にしても、ヘッダーの💬からチャットを使えます。</p><button class="big" onclick="closeS()">OK</button>`)}
+function charaSheet(){const c=chara();sheet(`<h3>🎨 キャラクター</h3><div class="cpvw"><span id="cpv" class="mface">${masSvg()}</span></div><div id="cs">${charaOpts()}</div>${persOpts()}<label class="tgl"><input type="checkbox" ${c.hide?'checked':''} onchange="setChara({hide:this.checked});say(this.checked?'':'また会えたね！','happy')"> キャラクターを表示しない</label><p class="note">非表示にしても、ヘッダーの💬からチャットを使えます。</p><button class="big" onclick="closeS()">OK</button>`)}
 // ===== チャット =====
 let chatLog=JSON.parse(sessionStorage.getItem('chat')||'[]'),flow=null;
-const CH0=['今日何する？','メニューを作って','記録の仕方','今日のkcal','今週何回やった？','キャラを変えたい'];
+const CH0=['今日何する？','メニューを作って','記録の仕方','今日のkcal','今週何回やった？','キャラを変えたい','話し方を変えたい'];
 function openChat(){let c=$('#chat');if(!c){c=document.createElement('div');c.id='chat';document.body.appendChild(c)}c.className='';
 c.innerHTML=`<div class="cbox"><div class="chd"><span class="mface">${masSvg()}</span><b>トレーニング相棒</b><button onclick="closeChat()">×</button></div><div class="cmsgs" id="cmsgs"></div><div class="chips" id="cchips"></div><form class="cin" onsubmit="event.preventDefault();const v=$('#ctx').value.trim();if(v){$('#ctx').value='';send(v)}"><input id="ctx" placeholder="メッセージを入力…" autocomplete="off"><button>送信</button></form></div>`;
-c.onclick=e=>{if(e.target.id==='chat')closeChat()};if(!chatLog.length)bot('やっほー！なんでも聞いてね。使い方の説明や、メニュー作りもできるよ ✨',CH0);else drawChat()}
+c.onclick=e=>{if(e.target.id==='chat')closeChat()};if(!chatLog.length)bot(line('tap')+'<br>使い方の説明や、メニュー作りもできるよ ✨',CH0);else drawChat()}
 function closeChat(){$('#chat')?.classList.add('hidden')}
 function drawChat(){const m=$('#cmsgs');if(!m)return;m.innerHTML=chatLog.map(x=>`<div class="msg ${x.u?'me':'bot'}">${x.t}</div>`).join('');m.scrollTop=1e9;const last=chatLog.at(-1);$('#cchips').innerHTML=(last&&!last.u&&last.c||CH0).map(c=>`<button class="chip" onclick="send(this.textContent)">${c}</button>`).join('');sessionStorage.setItem('chat',JSON.stringify(chatLog.slice(-60)))}
 function bot(t,c){chatLog.push({t,c});drawChat();const a=$('#chat .mface');if(a){a.className='mface';void a.offsetWidth;a.className='mface talk'}mood('talk')}
@@ -42,8 +42,10 @@ if(flow&&has(t,'キャンセル','やめ'))return flow=null,bot('OK、やめて�
 if(flow)return menuFlow(t);
 let m=t.match(/^▶ (.+)で始める$/);if(m){const mm=db.menus.find(x=>x.name===m[1]);if(mm){closeChat();return startMenu(mm.id)}}
 if(has(t,'メニュー')&&has(t,'作','つく','提案','考え')){flow={s:0,d:{}};return bot('いいね！メニューを一緒に作ろう 💪<br>まず、目的は？',['筋肉アップ','ダイエット','健康維持・体力づくり'])}
-if(has(t,'タイマー')&&has(t,'開始','スタート','始め','かけて')){startRest();go('today');return bot(`休憩タイマーを${db.rest||90}秒でスタートしたよ ⏱`)}
+if(has(t,'タイマー')&&has(t,'開始','スタート','始め','かけて')){startRest();go('today');return bot(line('restStart')+`<br>⏱ ${db.rest||90}秒`)}
 if(has(t,'開いて','開く','見せて','移動','行きたい')){const tb=has(t,'カレンダー')?'cal':has(t,'履歴')?'hist':has(t,'メニュー')?'menu':has(t,'今日','記録')?'today':has(t,'設定')?'set':null;if(tb){if(tb==='set'){closeChat();settings()}else{closeChat();go(tb)}return bot('開いたよ！')}}
+const pn=Object.keys(PERS).find(p=>t.includes(p))||(t.includes('関西')?'関西ノリ':t.includes('お姉さん')?'お姉さん応援':t.includes('鬼')?'鬼教官':null);if(pn){setPersona(pn);return bot(`話し方を「${pn}」にしたよ！<br>${line('sample')}`,['話し方を変えたい','今日何する？'])}
+if(has(t,'話し方','口調','しゃべり方'))return bot('どの話し方がいい？',Object.keys(PERS));
 const SA={星:'ほし',スター:'ほし',丸:'まる',四角:'しかく',雲:'くも',雫:'しずく',水滴:'しずく',はーと:'ハート'},sh=Object.keys(SHAPES).find(s=>t.includes(s))||SA[Object.keys(SA).find(a=>t.includes(a))],cn={ミント:'ミント',緑:'ミント',水色:'スカイ',スカイ:'スカイ',青:'スカイ',ピンク:'ピンク',オレンジ:'オレンジ',紫:'パープル',パープル:'パープル',黄:'イエロー',イエロー:'イエロー',赤:'レッド',レッド:'レッド',白:'ホワイト',ホワイト:'ホワイト'},col=Object.keys(cn).find(c=>t.includes(c));
 if(sh||col){setChara({...(sh?{shape:sh}:{}),...(col?{color:COLORS[cn[col]]}:{})});return bot(`じゃーん！${sh||''}${sh&&col?'・':''}${col?cn[col]:''}になったよ。どう？`,['まる','ほし','ハート','ピンク','スカイ','もっと細かく選ぶ'])}
 if(has(t,'もっと細かく','キャラを変','キャラ変','見た目','着せ替え','色を変','形を変')){if(has(t,'もっと细かく','もっと細かく')){closeChat();charaSheet();return}return bot('どの形にする？色の名前でもOKだよ（例：「ハートのピンク」）',[...Object.keys(SHAPES),'もっと細かく選ぶ'])}
@@ -53,10 +55,10 @@ if(has(t,'kcal','カロリー','消費')&&!has(t,'使い方','とは','仕組み
 if(has(t,'今週','何回','回数')&&!has(t,'使い方'))return bot(`今週は <b>${weekCount()}日</b> トレーニングしたよ！${weekCount()>=2?'いいペース！':'少しずつ続けよう 🌱'}`);
 if(has(t,'何する','なにする','おすすめ','何やる','どこ鍛え','今日は何'))return bot(suggest(),['メニューを作って','今日のkcal']);
 const hk=has(t,'CSV','エクスポート','書き出')?'CSV':has(t,'カレンダー')?'カレンダー':has(t,'履歴')?'履歴':has(t,'カロリー','kcal')?'カロリー':has(t,'休憩','タイマー')?'休憩':has(t,'メニュー')?'メニュー':has(t,'キャラ','形','色')?'キャラ':has(t,'記録','使い方','どうやって','入力')?'記録':null;
-if(hk)return bot(`<b>${HOW[hk][0]}</b>：${HOW[hk][1]}`,Object.values(HOW).map(x=>x[0]+'の使い方').filter(x=>!x.startsWith(HOW[hk][0])).slice(0,5));
+if(hk)return bot(wrap(`<b>${HOW[hk][0]}</b>：${HOW[hk][1]}`),Object.values(HOW).map(x=>x[0]+'の使い方').filter(x=>!x.startsWith(HOW[hk][0])).slice(0,5));
 if(has(t,'ありがと','すごい','かわいい'))return mood('happy'),bot('えへへ、ありがとう！一緒にがんばろうね ✨');
 if(has(t,'こんにち','おはよ','こんばん','やあ','はじめ'))return bot('やっほー！今日もいい1日にしよう 💪',CH0);
-bot('ごめんね、うまくわからなかったよ 💦 こんなことができるよ👇',CH0)}
+bot(line('unknown'),CH0)}
 function menuFlow(t){const d=flow.d;
 if(flow.s===0){d.goal=['筋肉アップ','ダイエット','健康維持・体力づくり'].find(g=>t.includes(g.slice(0,2)))||'健康維持・体力づくり';flow.s=1;return bot(`「${d.goal}」だね！経験はどのくらい？`,['初心者','中級者','上級者'])}
 if(flow.s===1){d.level=['初心者','中級者','上級者'].find(x=>t.includes(x.slice(0,2)))||'初心者';flow.s=2;return bot('週に何回くらいできそう？',['1','2','3','4','5'])}
@@ -64,6 +66,6 @@ if(flow.s===2){d.days=Math.min(6,Math.max(1,parseInt(t.replace(/[０-９]/g,c=>c
 if(flow.s===3){d.place=has(t,'自宅','家')?'自宅':has(t,'プール')?'プール':'ジム';flow.s=4;return bot('年代を教えて（スキップもOK）',['10代','20代','30代','40代','50代','60代','70代以上','スキップ'])}
 if(flow.s===4){const a=parseInt(t);d.age=a?a+5:(db.prof?.age||'');flow.s=5;return bot('性別は？（スキップもOK）',['男性','女性','スキップ'])}
 if(flow.s===5){d.sex=['男性','女性'].find(x=>t.includes(x))||'';flow=null;
-const goal=d.place==='自宅'?'自宅だけ':d.place==='プール'?'プール中心':d.goal;const ms=genMenus({goal,level:d.level,days:d.days,age:d.age});db.menus=db.menus||[];
+const ms=genMenus({goal:d.goal,place:d.place,level:d.level,days:d.days,age:d.age});db.menus=db.menus||[];
 ms.forEach(m=>db.menus.push({...m,id:uid(),name:m.name}));db.prof={...(db.prof||{}),...(d.age?{age:d.age}:{}),...(d.sex?{sex:d.sex}:{})};save();mood('happy');
 return bot(`できたよ！${ms.length}つのメニューを保存したよ 🎉<br>${ms.map(m=>`<div class="cm"><b>${m.name}</b><br>${m.items.map(x=>`${x.ex} ${x.sets}×${tgt(x)}`).join('、')}</div>`).join('')}<small>※一般的な目安です。体調に合わせて無理せずにね。</small>`,[...ms.map(m=>`▶ ${m.name}で始める`),'メニュータブを開いて'])}}
