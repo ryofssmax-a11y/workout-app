@@ -41,11 +41,6 @@ input{width:100%;height:52px;border-radius:14px;border:0;background:#232733;colo
 .cal .d span{display:flex;gap:2px}.cal .d .dot{width:5px;height:5px}
 .legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:#8a90a0;margin-top:10px}.legend span{display:flex;align-items:center;gap:4px}.legend .dot{margin:0}
 select{width:100%;height:48px;border-radius:14px;border:0;background:#232733;color:#fff;font-size:16px;margin:8px 0;padding:0 12px}
-#mascot{position:fixed;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:6px;z-index:5;pointer-events:none}
-#mascot>*{pointer-events:auto}.mface{animation:bob 2.4s ease-in-out infinite;filter:drop-shadow(0 4px 8px #0008)}
-.bub{max-width:230px;background:#fff;color:#222;border-radius:16px 16px 4px 16px;padding:10px 26px 10px 12px;font-size:14px;line-height:1.4;position:relative;animation:pop .25s}
-.bub span{position:absolute;top:4px;right:8px;color:#999;font-size:13px}
-@keyframes bob{50%{transform:translateY(-4px)}}@keyframes pop{from{transform:scale(.7);opacity:0}}
 .chips.wrap{flex-wrap:wrap;max-height:150px;overflow-y:auto}
 .chip.cat{padding:8px 14px;font-size:13px}.chip.cat.on{background:#e8eaf0;color:#111}
 .search{height:46px;margin:2px 0 8px}
@@ -70,3 +65,33 @@ label.form{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#8a90
 .ec{display:flex;gap:6px;margin-top:8px}.sm{flex:1;text-align:center}.sm small{color:#8a90a0;font-size:11px}.sm div{display:flex;align-items:center;justify-content:space-between;background:#232733;border-radius:12px}.sm button{background:none;border:0;color:#fff;width:36px;height:42px;font-size:20px}
 .swl{display:flex;flex-wrap:wrap;gap:6px;max-height:50vh;overflow-y:auto;margin:10px 0}
 .sheet>div{max-height:88vh;overflow-y:auto}
+#mascot{position:fixed;right:10px;bottom:calc(74px + env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:4px;z-index:5;pointer-events:none}
+#mascot>*{pointer-events:auto}.bubw:empty{display:none}
+.bub{max-width:230px;background:#fff;color:#222;border-radius:16px 16px 4px 16px;padding:10px 26px 10px 12px;font-size:14px;line-height:1.4;position:relative;animation:pop .25s;margin-bottom:22px}
+.bub span{position:absolute;top:4px;right:8px;color:#999;font-size:13px}
+.mface{position:relative;width:62px;height:56px;cursor:pointer}
+.slime{overflow:visible;filter:drop-shadow(0 0 10px #4fe0b655)}
+.slime .body{transform-origin:40px 66px;animation:breathe 2.6s ease-in-out infinite}
+.slime .shadow{transform-origin:40px 68px;animation:shad 2.6s ease-in-out infinite}
+.slime .eyes{transform-origin:40px 42px;animation:blink 4.2s infinite}
+.mface.talk .body{animation:squash .45s ease-out 2}
+.mface.wiggle .body{animation:wig .5s ease-in-out}
+.mface.happy .body{animation:jump .8s cubic-bezier(.3,1.6,.5,1) 2}
+.mface .sp{position:absolute;font-style:normal;color:#ffe27a;opacity:0;font-size:14px;pointer-events:none}
+.s1{left:-6px;top:6px}.s2{right:-6px;top:0}.s3{left:28px;top:-14px}
+.mface.happy .sp{animation:spark .8s ease-out 2}.mface.happy .s2{animation-delay:.15s}.mface.happy .s3{animation-delay:.3s}
+.mface.sleepy .body{animation:droop 3.5s ease-in-out infinite}
+.mface.sleepy .eyes{animation:none;transform:scaleY(.15)}
+.mface .z{position:absolute;right:-4px;top:-6px;font-style:normal;color:#9fe;font-weight:800;opacity:0}
+.mface.sleepy .z{animation:zz 2.4s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.06,.94)}}
+@keyframes shad{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.08)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes squash{0%{transform:scale(1,1)}30%{transform:scale(1.15,.82)}60%{transform:translateY(-8px) scale(.9,1.12)}100%{transform:scale(1,1)}}
+@keyframes wig{0%,100%{transform:rotate(0)}20%{transform:rotate(-10deg) scale(1.05,.95)}40%{transform:rotate(9deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(3deg)}}
+@keyframes jump{0%{transform:scale(1.2,.8)}40%{transform:translateY(-26px) scale(.88,1.14)}70%{transform:translateY(0) scale(1.18,.84)}100%{transform:scale(1,1)}}
+@keyframes spark{0%{opacity:0;transform:translateY(6px) scale(.4)}40%{opacity:1}100%{opacity:0;transform:translateY(-18px) scale(1.2) rotate(90deg)}}
+@keyframes droop{0%,100%{transform:scale(1.12,.86)}50%{transform:scale(1.16,.82)}}
+@keyframes zz{0%{opacity:0;transform:translate(0,4px)}50%{opacity:1}100%{opacity:0;transform:translate(8px,-14px)}}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.mface *,.bub{animation:none!important}.mface.happy .sp{opacity:1}}

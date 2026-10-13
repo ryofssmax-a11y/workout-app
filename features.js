@@ -17,7 +17,7 @@ const rows=P.items.map((it,i)=>{const done=Math.min(it.sets,L.filter(s=>s.ex===i
 return `<div class="card plan"><h3>📋 ${P.name} <small>${dn}/${all}</small><button class="mini" onclick="db.plan=null;save();render()">終了</button></h3><div class="pbar"><i style="width:${all?dn/all*100:0}%"></i></div>${rows}</div>`}
 const tgt=it=>{const u=unitOf(it.ex);return u==='sec'?it.reps+'秒':u==='min'||u==='swim'?it.reps+'分':it.reps+'回'};
 function planDo(i){const it=db.plan.items[i];cur=it.ex;db.cur=it.ex;const u=unitOf(it.ex),p=prevOf(it.ex),t=(db.logs[today()]||[]).filter(s=>s.ex===it.ex).at(-1),s=t||p?.sets.at(-1);w=u==='kg'?(s?s.w:w):(s&&u==='bw'?s.w:0);r=it.reps;dd=0;rec.rest=it.rest;rec();
-const P=db.plan,L=db.logs[today()];if(P.items.every(x=>L.filter(s=>s.ex===x.ex&&s.t>=P.t).length>=x.sets))setTimeout(()=>say(`🎉 「${P.name}」完了！おつかれさま！`),50)}
+const P=db.plan,L=db.logs[today()];if(P.items.every(x=>L.filter(s=>s.ex===x.ex&&s.t>=P.t).length>=x.sets))setTimeout(()=>say(`🎉 「${P.name}」完了！おつかれさま！`,'happy'),50)}
 function startMenu(id){const m=db.menus.find(x=>x.id===id);db.plan={k:today(),t:Date.now(),name:m.name,items:m.items.map(x=>({...x}))};save();go('today');say(`「${m.name}」スタート！✓ボタンでサクッと記録してね`)}
 // ===== メニュー作成 =====
 let gen=null,editId=null,mf=null;
