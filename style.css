@@ -54,3 +54,19 @@ header{position:relative}.clk{position:absolute;right:18px;top:calc(14px + env(s
 .tm{font-style:normal;color:#8a90a0;font-size:13px;margin-right:4px;font-variant-numeric:tabular-nums}
 .sess{color:#4ade80;font-size:13px;margin:4px 0}
 .hl{font-size:13px;color:#c8ccd6;margin-top:6px;line-height:1.7}
+.gear{position:absolute;right:12px;top:calc(8px + env(safe-area-inset-top));background:none;border:0;font-size:22px;padding:8px}
+.clk{right:58px!important}
+.kc{font-style:normal;color:#fbbf24;font-size:12px;margin-right:8px}
+.kday{color:#fbbf24;font-size:13px;margin:4px 0}.kday small{color:#8a90a0}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}.form label{font-size:12px;color:#8a90a0;display:flex;flex-direction:column;gap:4px}.form select{margin:0}
+label.form{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#8a90a0;grid-template-columns:none}
+.note{font-size:12px;color:#8a90a0;line-height:1.5}
+.plan h3{display:flex;align-items:center;gap:8px}.plan h3 small{color:#8a90a0}.plan h3 .mini{margin-left:auto}
+.pbar{height:6px;background:#262a35;border-radius:3px;overflow:hidden;margin:6px 0}.pbar i{display:block;height:100%;background:#4ade80}
+.pi{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid #262a35}.pi span{flex:1;display:flex;flex-direction:column}.pi small{color:#8a90a0;font-size:12px}.pi em{font-style:normal;color:#8a90a0}
+.pi button{width:52px;height:44px;border-radius:12px;border:0;background:#ff6b35;color:#fff;font-size:20px;font-weight:800}.pi.ok button{background:#1f4a31}.pi.ok b{color:#4ade80}
+.mi{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px}.mi small{margin-left:auto;color:#8a90a0}.mi .dot{margin:0}
+.ei .eh{display:flex;align-items:center}.eh b{flex:1}.eh button{background:#232733;border:0;color:#fff;border-radius:10px;width:40px;height:40px;margin-left:4px}.eh button:disabled{opacity:.3}
+.ec{display:flex;gap:6px;margin-top:8px}.sm{flex:1;text-align:center}.sm small{color:#8a90a0;font-size:11px}.sm div{display:flex;align-items:center;justify-content:space-between;background:#232733;border-radius:12px}.sm button{background:none;border:0;color:#fff;width:36px;height:42px;font-size:20px}
+.swl{display:flex;flex-wrap:wrap;gap:6px;max-height:50vh;overflow-y:auto;margin:10px 0}
+.sheet>div{max-height:88vh;overflow-y:auto}
